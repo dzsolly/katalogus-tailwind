@@ -6,7 +6,7 @@
 
   <title>Katalógus</title>
 
-  <!-- ✅ EZ A LÉNYEG -->
+  <!-- ✅ Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -16,21 +16,25 @@
 
   <h1 class="text-3xl font-bold text-center mb-6">🚀 Katalógus</h1>
 
-  <input id="search" placeholder="Keresés..."
-    class="w-full p-3 mb-4 border rounded-2xl"
-    onkeyup="renderItems()">
+  <!-- SEARCH -->
+  <input id="search"
+    placeholder="Keresés..."
+    onkeyup="renderItems()"
+    class="w-full p-3 mb-4 border rounded-2xl">
 
-  <div class="flex flex-wrap gap-2 mb-6 justify-center">
-    <button onclick="setCategory('all', event)" class="btn bg-blue-500 text-white px-4 py-2 rounded-xl">Összes</button>
-    <button onclick="setCategory('tech', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Tech</button>
-    <button onclick="setCategory('auto', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Autó</button>
-  </div>
+  <!-- ✅ AUTO FILTER -->
+  <div id="filters"
+       class="flex flex-wrap gap-2 mb-6 justify-center"></div>
 
-  <div id="list" class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <!-- GRID -->
+  <div id="list"
+       class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"></div>
 
 </div>
 
 <script>
+
+/* ✅ DATA */
 let data = [
   {
     name: "Laptop",
@@ -45,21 +49,47 @@ let data = [
     image: "https://picsum.photos/401"
   },
   {
-    name: "Ideoda",
-    desc: "Kapjadbéáéáé",
-    category: "Yez",
-    image: "https://picsum.photos/404"
-  },
-  {
     name: "Autó",
     desc: "Gyors és kényelmes",
     category: "auto",
     image: "https://picsum.photos/402"
+  },
+  {
+    name: "Szék",
+    desc: "Kényelmes ülés",
+    category: "butor",
+    image: "https://picsum.photos/403"
   }
 ];
 
 let currentCategory = "all";
 
+/* ✅ KATEGÓRIAK KINYERÉSE */
+function getCategories() {
+  const cats = data.map(item => item.category);
+  return ["all", ...new Set(cats)];
+}
+
+/* ✅ FILTER GOMBOK GENERÁLÁSA */
+function renderFilters() {
+  const container = document.getElementById("filters");
+  container.innerHTML = "";
+
+  getCategories().forEach(cat => {
+    container.innerHTML += `
+      <button onclick="setCategory('${cat}', event)"
+        class="btn px-4 py-2 rounded-xl transition ${
+          cat === "all"
+            ? "bg-blue-500 text-white"
+            : "bg-gray-200"
+        }">
+        ${cat}
+      </button>
+    `;
+  });
+}
+
+/* ✅ RENDER */
 function renderItems() {
   const list = document.getElementById("list");
   const search = document.getElementById("search").value.toLowerCase();
@@ -75,7 +105,8 @@ function renderItems() {
       list.innerHTML += `
         <div class="bg-white rounded-2xl shadow p-4">
 
-          <img src="${item.image}" class="w-full h-40 object-cover rounded-lg mb-"text-gray-500 text-sm">${item.desc}</p>
+          <img src="${item.image}"
+               class="w-full h-40 object-cover rounded-lg mbm">${item.desc}</p>
 
         </div>
       `;
@@ -83,6 +114,7 @@ function renderItems() {
   });
 }
 
+/* ✅ CATEGORY SELECT */
 function setCategory(cat, e) {
   currentCategory = cat;
 
@@ -96,7 +128,10 @@ function setCategory(cat, e) {
   renderItems();
 }
 
+/* ✅ INIT */
+renderFilters();
 renderItems();
+
 </script>
 
 </body>
