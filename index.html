@@ -2,65 +2,102 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <title>Katalógus</title>
+  <title>Katalógus Ultra</title>
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 min-h-screen">
 
-  <div class="max-w-6xl mx-auto p-6">
+<div class="max-w-6xl mx-auto p-6">
 
-    <!-- Cím -->
-    <h1 class="text-3xl font-bold mb-6 text-center">
-      Katalógus
-    </h1>
+  <!-- HEADER -->
+  <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">
+    🚀 Katalógus
+  </h1>
 
-    <!-- Kereső -->
-    <input 
-      type="text" 
-      id="search"
-      placeholder="Keresés..." 
-      class="w-full p-3 mb-6 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      onkeyup="filterItems()"
-    >
+  <!-- SEARCH -->
+  <input
+    id="search"
+    type="text"
+    placeholder="Keresés..."
+    onkeyup="filterItems()"
+    class="w-full p-4 mb-6 border border-gray-300 rounded-2xl shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+  >
 
-    <!-- Lista -->
-    <div id="list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- FILTER BUTTONS -->
+  <div class="flex gap-3 mb-8 flex-wrap justify-center">
+    <button onclick="filterCategory('all')" class="filter-btn bg-blue-500 text-white px-4 py-2 rounded-xl">Összes</button>
+    <button onclick="filterCategory('tech')" class="filter-btn bg-gray-200 px-4 py-2 rounded-xl">Tech</button>
+    <button onclick="filterCategory('auto')" class="filter-btn bg-gray-200 px-4 py-2 rounded-xl">Autó</button>
+    <button onclick="filterCategory('egyeb')" class="filter-btn bg-gray-200 px-4 py-2 rounded-xl">Egyéb</button>
+  </div>
 
-      <!-- ITEM -->
-      <div class="item bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition">
-        <h2 class="text-lg font-semibold">Termék 1</h2>
-        <p class="text-gray-500">Leírás 1</p>
+  <!-- GRID -->
+  <div id="list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+    <!-- ITEM -->
+    <div class="item bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300" data-category="tech">
+      <img src="https://via.placeholder.com/400" class="w-full h-40 object-cover">
+      <div class="p-4">
+        <h2 class="text-lg font-semibold">Laptop</h2>
+        <p class="text-gray-500 text-sm">Gyors és modern eszköz</p>
       </div>
+    </div>
 
-      <div class="item bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition">
-        <h2 class="text-lg font-semibold">Termék 2</h2>
-        <p class="text-gray-500">Leírás 2</p>
+    <div class="item bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300" data-category="auto">
+      <img src="https://via.placeholder.com/400" class="w-full h-40 object-cover">
+      <div class="p-4">
+        <h2 class="text-lg font-semibold">Autó</h2>
+        <p class="text-gray-500 text-sm">Kényelmes és gyors</p>
       </div>
+    </div>
 
-      <div class="item bg-white rounded-2xl shadow-md p-4 hover:shadow-lg transition">
-        <h2 class="text-lg font-semibold">Termék 3</h2>
-        <p class="text-gray-500">Leírás 3</p>
+    <div class="item bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300" data-category="egyeb">
+      <img src="https://via.placeholder.com/400" class="w-full h-40 object-cover">
+      <div class="p-4">
+        <h2 class="text-lg font-semibold">Szék</h2>
+        <p class="text-gray-500 text-sm">Kényelmes ülés</p>
       </div>
-
     </div>
 
   </div>
 
-  <!-- Kereső logika -->
-  <script>
-    function filterItems() {
-      let input = document.getElementById("search").value.toLowerCase();
-      let items = document.getElementsByClassName("item");
+</div>
 
-      for (let i = 0; i < items.length; i++) {
-        let text = items[i].innerText.toLowerCase();
-        items[i].style.display = text.includes(input) ? "" : "none";
-      }
-    }
-  </script>
+<!-- SCRIPT -->
+<script>
+let currentCategory = "all";
+
+function filterItems() {
+  let input = document.getElementById("search").value.toLowerCase();
+  let items = document.querySelectorAll(".item");
+
+  items.forEach(item => {
+    let text = item.innerText.toLowerCase();
+    let category = item.dataset.category;
+
+    let matchText = text.includes(input);
+    let matchCategory = currentCategory === "all" || category === currentCategory;
+
+    item.style.display = (matchText && matchCategory) ? "" : "none";
+  });
+}
+
+function filterCategory(category) {
+  currentCategory = category;
+
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.classList.remove("bg-blue-500","text-white");
+    btn.classList.add("bg-gray-200");
+  });
+
+  event.target.classList.add("bg-blue-500","text-white");
+
+  filterItems();
+}
+</script>
 
 </body>
 </html>
