@@ -2,9 +2,9 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <title>Katalógus Ultra</title>
+  <title>Katalógus PRO</title>
 
-  <!-- ✅ JAVÍTVA: helyes Tailwind betöltés -->
+  <!-- ✅ HELYES Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -13,7 +13,7 @@
 <div class="max-w-6xl mx-auto px-4 py-6">
 
   <!-- HEADER -->
-  <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-800 mb-6 sm:mb-8">
+  <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-6">
     🚀 Katalógus
   </h1>
 
@@ -22,84 +22,102 @@
     id="search"
     type="text"
     placeholder="Keresés..."
-    onkeyup="filterItems()"
-    class="w-full p-3 sm:p-4 mb-4 sm:mb-6 border border-gray-300 rounded-2xl shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+    onkeyup="renderItems()"
+    class="w-full p-3 sm:p-4 mb-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
   >
 
   <!-- FILTER -->
-  <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-    <button onclick="filterCategory('all', event)" class="filter-btn bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base">Összes</button>
-    <button onclick="filterCategory('tech', event)" class="filter-btn bg-gray-200 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base">Tech</button>
-    <button onclick="filterCategory('auto', event)" class="filter-btn bg-gray-200 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base">Autó</button>
-    <button onclick="filterCategory('egyeb', event)" class="filter-btn bg-gray-200 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base">Egyéb</button>
+  <div class="flex flex-wrap gap-2 justify-center mb-6">
+    <button onclick="setCategory('all', event)" class="btn bg-blue-500 text-white px-4 py-2 rounded-xl">Összes</button>
+    <button onclick="setCategory('tech', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Tech</button>
+    <button onclick="setCategory('auto', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Autó</button>
   </div>
 
   <!-- GRID -->
-  <div id="list" class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-
-    <!-- ITEM -->
-    <div class="item bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300"
-         data-category="tech">
-      <img src="https://via.placeholder.com/400" class="w-full h-40 sm:h-48 object-cover">
-      <div class="p-4">
-        <h2 class="text-base sm:text-lg font-semibold">Laptop</h2>
-        <p class="text-gray-500 text-sm">Gyors és modern eszköz</p>
-      </div>
-    </div>
-
-    <div class="item bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300"
-         data-category="auto">
-      <img src="https://via.placeholder.com/400" class="w-full h-40 sm:h-48 object-cover">
-      <div class="p-4">
-        <h2 class="text-base sm:text-lg font-semibold">Autó</h2>
-        <p class="text-gray-500 text-sm">Kényelmes és gyors</p>
-      </div>
-    </div>
-
-    <div class="item bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300"
-         data-category="egyeb">
-      <img src="https://via.placeholder.com/400" class="w-full h-40 sm:h-48 object-cover">
-      <div class="p-4">
-        <h2 class="text-base sm:text-lg font-semibold">Szék</h2>
-        <p class="text-gray-500 text-sm">Kényelmes ülés</p>
-      </div>
-    </div>
-
+  <div id="list"
+       class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
   </div>
 
 </div>
 
-<!-- SCRIPT -->
 <script>
+/* ✅ ADAT */
+const data = [
+  {
+    name: "Laptop",
+    desc: "Gyors és modern eszköz",
+    category: "tech",
+    image: "https://via.placeholder.com/400"
+  },
+  {
+    name: "Telefon",
+    desc: "Okos és kompakt",
+    category: "tech",
+    image: "https://via.placeholder.com/400"
+  },
+  {
+    name: "Autó",
+    desc: "Gyors és kényelmes",
+    category: "auto",
+    image: "https://via.placeholder.com/400"
+  },
+  {
+    name: "Szék",
+    desc: "Kényelmes ülés",
+    category: "egyeb",
+    image: "https://via.placeholder.com/400"
+  }
+];
+
 let currentCategory = "all";
 
-function filterItems() {
-  const input = document.getElementById("search").value.toLowerCase();
-  const items = document.querySelectorAll(".item");
+/* ✅ RENDER */
+function renderItems() {
+  const container = document.getElementById("list");
+  const search = document.getElementById("search").value.toLowerCase();
 
-  items.forEach(item => {
-    const text = item.innerText.toLowerCase();
-    const category = item.dataset.category;
+  container.innerHTML = "";
 
-    const matchText = text.includes(input);
-    const matchCategory = currentCategory === "all" || category === currentCategory;
+  data.forEach(item => {
+    const matchText =
+      item.name.toLowerCase().includes(search) ||
+      item.desc.toLowerCase().includes(search);
 
-    item.style.display = (matchText && matchCategory) ? "" : "none";
+    const matchCategory =
+      currentCategory === "all" || item.category === currentCategory;
+
+    if (matchText && matchCategory) {
+      container.innerHTML += `
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden
+                    hover:shadow-xl hover:-translate-y-1 transition duration-300">
+
+          <img src="${item.image}"
+              s="text-base sm:text-lg font-semibold">${item.name}</h2>
+            <p class="text-gray-500 text-sm">${item.desc}</p>
+          </div>
+
+        </div>
+      `;
+    }
   });
 }
 
-function filterCategory(category, event) {
+/* ✅ CATEGORY */
+function setCategory(category, event) {
   currentCategory = category;
 
-  document.querySelectorAll(".filter-btn").forEach(btn => {
+  document.querySelectorAll(".btn").forEach(btn => {
     btn.classList.remove("bg-blue-500","text-white");
     btn.classList.add("bg-gray-200");
   });
 
   event.target.classList.add("bg-blue-500","text-white");
 
-  filterItems();
+  renderItems();
 }
+
+/* ✅ INIT */
+renderItems();
 </script>
 
 </body>
