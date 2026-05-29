@@ -2,89 +2,102 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
+
+  <!-- ✅ EZ VOLT A FŐ HIBA -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Katalógus PRO</title>
 
-  https://cdn.tailwindcss.com
+  <!-- ✅ HELYES Tailwind -->
+  https://cdn.tailwindcss.comscript>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
 
 <div class="max-w-6xl mx-auto px-4 py-6">
 
-  <h1 class="text-3xl font-bold text-center mb-6">🚀 Katalógus</h1>
+  <!-- HEADER -->
+  <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-6">
+    🚀 Katalógus
+  </h1>
 
   <!-- SEARCH -->
-  <input id="search" onkeyup="renderItems()"
+  <input
+    id="search"
+    type="text"
     placeholder="Keresés..."
-    class="w-full p-3 mb-4 border rounded-2xl">
+    onkeyup="renderItems()"
+    class="w-full p-3 sm:p-4 mb-4 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none"
+  >
 
   <!-- FILTER -->
-  <div class="flex flex-wrap gap-2 mb-6 justify-center">
+  <div class="flex flex-wrap gap-2 justify-center mb-6">
     <button onclick="setCategory('all', event)" class="btn bg-blue-500 text-white px-4 py-2 rounded-xl">Összes</button>
     <button onclick="setCategory('tech', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Tech</button>
     <button onclick="setCategory('auto', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Autó</button>
-  </div>
-
-  <!-- ADMIN PANEL -->
-  <div class="bg-white p-4 rounded-2xl shadow mb-6">
-    <h2 class="font-bold mb-3">➕ Új elem hozzáadása</h2>
-
-    <input id="name" placeholder="Név" class="w-full p-2 mb-2 border rounded">
-    <input id="desc" placeholder="Leírás" class="w-full p-2 mb-2 border rounded">
-    <input id="category" placeholder="Kategória (pl tech)" class="w-full p-2 mb-2 border rounded">
-    <input id="image" placeholder="Kép URL" class="w-full p-2 mb-2 border rounded">
-
-    <button onclick="addItem()"
-      class="bg-green-500 text-white px-4 py-2 rounded-xl w-full">
-      Hozzáadás
-    </button>
+    <button onclick="setCategory('egyeb', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Egyéb</button>
   </div>
 
   <!-- GRID -->
-  <div id="list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <div id="list"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+  </div>
 
 </div>
 
 <script>
-
-let data = JSON.parse(localStorage.getItem("data")) || [
+const data = [
   {
     name: "Laptop",
-    desc: "Gyors eszköz",
+    desc: "Gyors és modern eszköz",
+    category: "tech",
+    image: "https://via.placeholder.com/400"
+  },
+  {
+    name: "Telefon",
+    desc: "Okos és kompakt",
     category: "tech",
     image: "https://via.placeholder.com/400"
   },
   {
     name: "Autó",
-    desc: "Gyors jármű",
+    desc: "Gyors és kényelmes",
     category: "auto",
+    image: "https://via.placeholder.com/400"
+  },
+  {
+    name: "Szék",
+    desc: "Kényelmes ülés",
+    category: "egyeb",
     image: "https://via.placeholder.com/400"
   }
 ];
 
 let currentCategory = "all";
 
-/* ✅ RENDER */
 function renderItems() {
-  const list = document.getElementById("list");
+  const container = document.getElementById("list");
   const search = document.getElementById("search").value.toLowerCase();
 
-  list.innerHTML = "";
+  container.innerHTML = "";
 
   data.forEach(item => {
-    if (
-      (currentCategory === "all" || item.category === currentCategory) &&
-      (item.name.toLowerCase().includes(search) ||
-       item.desc.toLowerCase().includes(search))
-    ) {
-      list.innerHTML += `
-        <div class="bg-white rounded-2xl shadow hover:shadow-xl transition">
+    const matchText =
+      item.name.toLowerCase().includes(search) ||
+      item.desc.toLowerCase().includes(search);
+
+    const matchCategory =
+      currentCategory === "all" || item.category === currentCategory;
+
+    if (matchText && matchCategory) {
+      container.innerHTML += `
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden 
+                    hover:shadow-xl hover:-translate-y-1 transition duration-300">
 
           ${item.image}
 
           <div class="p-4">
-            <h2 class="font-semibold">${item.name}</h2>
+            <h2 class="text-base sm:text-lg font-semibold">${item.name}</h2>
             <p class="text-gray-500 text-sm">${item.desc}</p>
           </div>
 
@@ -94,41 +107,20 @@ function renderItems() {
   });
 }
 
-/* ✅ ADD ITEM */
-function addItem() {
-  const name = document.getElementById("name").value;
-  const desc = document.getElementById("desc").value;
-  const category = document.getElementById("category").value;
-  const image = document.getElementById("image").value;
+function setCategory(category, event) {
+  currentCategory = category;
 
-  if (!name || !desc || !category || !image) {
-    alert("Tölts ki mindent!");
-    return;
-  }
-
-  data.push({ name, desc, category, image });
-
-  localStorage.setItem("data", JSON.stringify(data));
-
-  renderItems();
-}
-
-/* ✅ CATEGORY */
-function setCategory(cat, e) {
-  currentCategory = cat;
-
-  document.querySelectorAll(".btn").forEach(b => {
-    b.classList.remove("bg-blue-500","text-white");
-    b.classList.add("bg-gray-200");
+  document.querySelectorAll(".btn").forEach(btn => {
+    btn.classList.remove("bg-blue-500","text-white");
+    btn.classList.add("bg-gray-200");
   });
 
-  e.target.classList.add("bg-blue-500","text-white");
+  event.target.classList.add("bg-blue-500","text-white");
 
   renderItems();
 }
 
 renderItems();
-
 </script>
 
 </body>
