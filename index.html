@@ -2,23 +2,23 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-
-  <!-- ✅ viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Katalógus PRO</title>
+  <title>Katalógus</title>
 
-  <!-- ✅ FIX Tailwind -->
-  <script src="https://cdn.tailwindcss
+  <!-- ✅ EZ A LÉNYEG -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
 <body class="bg-gray-100">
 
 <div class="max-w-6xl mx-auto px-4 py-6">
 
   <h1 class="text-3xl font-bold text-center mb-6">🚀 Katalógus</h1>
 
-  <input id="search" onkeyup="renderItems()"
-    placeholder="Keresés..."
-    class="w-full p-3 mb-4 border rounded-2xl">
+  <input id="search" placeholder="Keresés..."
+    class="w-full p-3 mb-4 border rounded-2xl"
+    onkeyup="renderItems()">
 
   <div class="flex flex-wrap gap-2 mb-6 justify-center">
     <button onclick="setCategory('all', event)" class="btn bg-blue-500 text-white px-4 py-2 rounded-xl">Összes</button>
@@ -26,7 +26,7 @@
     <button onclick="setCategory('auto', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Autó</button>
   </div>
 
-  <div id="list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <div id="list" class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"></div>
 
 </div>
 
@@ -36,25 +36,19 @@ let data = [
     name: "Laptop",
     desc: "Gyors és modern",
     category: "tech",
-    image: "https://via.placeholder.com/400"
+    image: "https://picsum.photos/400"
   },
   {
     name: "Telefon",
     desc: "Okos és kompakt",
     category: "tech",
-    image: "https://via.placeholder.com/400"
+    image: "https://picsum.photos/401"
   },
   {
     name: "Autó",
     desc: "Gyors és kényelmes",
     category: "auto",
-    image: "https://via.placeholder.com/400"
-  },
-  {
-    name: "Szék",
-    desc: "Kényelmes ülés",
-    category: "egyeb",
-    image: "https://via.placeholder.com/400"
+    image: "https://picsum.photos/402"
   }
 ];
 
@@ -73,11 +67,9 @@ function renderItems() {
        item.desc.toLowerCase().includes(search))
     ) {
       list.innerHTML += `
-        <div class="bg-white rounded-2xl shadow hover:shadow-xl transition">
+        <div class="bg-white rounded-2xl shadow p-4">
 
-          <img src="${item.image}" class="w-full h-40 object-coverh2 class="font-semibold">${item.name}</h2>
-            <p class="text-gray-500 text-sm">${item.desc}</p>
-          </div>
+          <img src="${item.image}" class="w-full h-40 object-cover rounded-lg mb-"text-gray-500 text-sm">${item.desc}</p>
 
         </div>
       `;
