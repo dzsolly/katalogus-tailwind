@@ -2,6 +2,10 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
+
+  <!-- ✅ EZ VOLT A FŐ HIBA -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Katalógus PRO</title>
 
   <!-- ✅ HELYES Tailwind -->
@@ -31,17 +35,17 @@
     <button onclick="setCategory('all', event)" class="btn bg-blue-500 text-white px-4 py-2 rounded-xl">Összes</button>
     <button onclick="setCategory('tech', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Tech</button>
     <button onclick="setCategory('auto', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Autó</button>
+    <button onclick="setCategory('egyeb', event)" class="btn bg-gray-200 px-4 py-2 rounded-xl">Egyéb</button>
   </div>
 
   <!-- GRID -->
   <div id="list"
-       class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
   </div>
 
 </div>
 
 <script>
-/* ✅ ADAT */
 const data = [
   {
     name: "Laptop",
@@ -71,7 +75,6 @@ const data = [
 
 let currentCategory = "all";
 
-/* ✅ RENDER */
 function renderItems() {
   const container = document.getElementById("list");
   const search = document.getElementById("search").value.toLowerCase();
@@ -88,11 +91,11 @@ function renderItems() {
 
     if (matchText && matchCategory) {
       container.innerHTML += `
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden
+        <div class="bg-white rounded-2xl shadow-md overflow-hidden 
                     hover:shadow-xl hover:-translate-y-1 transition duration-300">
 
           <img src="${item.image}"
-              s="text-base sm:text-lg font-semibold">${item.name}</h2>
+               class="w-full h-40 sm:text-lg font-semibold">${item.name}</h2>
             <p class="text-gray-500 text-sm">${item.desc}</p>
           </div>
 
@@ -102,7 +105,6 @@ function renderItems() {
   });
 }
 
-/* ✅ CATEGORY */
 function setCategory(category, event) {
   currentCategory = category;
 
@@ -116,7 +118,6 @@ function setCategory(category, event) {
   renderItems();
 }
 
-/* ✅ INIT */
 renderItems();
 </script>
 
